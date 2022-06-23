@@ -13,35 +13,29 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TrackListBloc(
-        RepositoryProvider.of<API>(context),
-        RepositoryProvider.of<ConnectivityService>(context)
-      )..add(FetchList()),
+      create: (context) => TrackListBloc(RepositoryProvider.of<API>(context),
+          RepositoryProvider.of<ConnectivityService>(context))
+        ..add(FetchList()),
       child: Scaffold(
         appBar: AppBar(
           title: Center(child: Text('Trending')),
         ),
         body: BlocBuilder<TrackListBloc, TrackState>(
           builder: (context, state) {
-            
             if (state is TrackListLoading) {
-
               return Center(child: CircularProgressIndicator());
-
             } else if (state is TrackListLoaded) {
-
               return ListView.builder(
                 itemCount: state.tracks.length,
                 itemBuilder: (context, index) {
                   return TrackTile(track: state.tracks[index]);
                 },
-                
               );
             }
-            if(state is ListNoInternetState)
-            {
-              
-              return Center(child: Text('No internet connection!'),); 
+            if (state is ListNoInternetState) {
+              return Center(
+                child: Text('No internet connection!'),
+              );
             }
             return Center(
               child: CircularProgressIndicator(),
@@ -63,7 +57,7 @@ class TrackTile extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => TrackDetailScreen(id:track.id),
+          builder: (context) => TrackDetailScreen(id: track.id),
         ),
       ),
       child: Container(

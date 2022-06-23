@@ -44,13 +44,7 @@ class TrackDetailLoading extends TrackState {}
 
 class ListNoInternetState extends TrackState {}
 
-class DetailsNoInternetState extends TrackState {
-  // int _id;
-
-  // DetailsNoInternetState(this._id);
-
-  // int get id => _id;
-}
+class DetailsNoInternetState extends TrackState {}
 
 class ListNoInternetEvent extends TrackEvent {}
 
@@ -71,7 +65,8 @@ class TrackListBloc extends Bloc<TrackEvent, TrackState> {
   API api;
   ConnectivityService _connectivityService;
 
-  TrackListBloc(this.api, this._connectivityService) : super(TrackListLoading()) {
+  TrackListBloc(this.api, this._connectivityService)
+      : super(TrackListLoading()) {
     _connectivityService.connectivityStream.stream.listen((event) {
       if (event == ConnectivityResult.none) {
         add(ListNoInternetEvent());
@@ -89,7 +84,6 @@ class TrackListBloc extends Bloc<TrackEvent, TrackState> {
     }));
 
     on<ListNoInternetEvent>(((event, emit) {
-
       emit(ListNoInternetState());
     }));
   }
@@ -97,10 +91,11 @@ class TrackListBloc extends Bloc<TrackEvent, TrackState> {
 
 class TrackDetailsBloc extends Bloc<TrackEvent, TrackState> {
   API api;
-  int id=0;
+  int id = 0;
   ConnectivityService _connectivityService;
 
-  TrackDetailsBloc(this.api, this._connectivityService) : super(TrackListLoading()) {
+  TrackDetailsBloc(this.api, this._connectivityService)
+      : super(TrackListLoading()) {
     _connectivityService.connectivityStream.stream.listen((event) {
       if (event == ConnectivityResult.none) {
         add(DetailsNoInternetEvent());
@@ -112,13 +107,12 @@ class TrackDetailsBloc extends Bloc<TrackEvent, TrackState> {
     on<FetchDetail>((event, emit) async {
       emit(TrackDetailLoading());
       final detail = await api.getDetails(event._id);
-      id=event._id;
+      id = event._id;
 
       emit(TrackDetailLoaded(detail));
     });
-    
-    on<DetailsNoInternetEvent>(((event, emit) {
 
+    on<DetailsNoInternetEvent>(((event, emit) {
       emit(DetailsNoInternetState());
     }));
   }
