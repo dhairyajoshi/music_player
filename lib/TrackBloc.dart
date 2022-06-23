@@ -95,7 +95,7 @@ class TrackDetailsBloc extends Bloc<TrackEvent, TrackState> {
   ConnectivityService _connectivityService;
 
   TrackDetailsBloc(this.api, this._connectivityService)
-      : super(TrackListLoading()) {
+      : super(TrackDetailLoading()) {
     _connectivityService.connectivityStream.stream.listen((event) {
       if (event == ConnectivityResult.none) {
         add(DetailsNoInternetEvent());
